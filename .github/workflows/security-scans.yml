@@ -21,9 +21,10 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.organization=copilotorg -Dsonar.projectKey=copilotproj
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.organization=practicemani -Dsonar.projectKey=practicemani_manipract 
 
   snyk-scan:
+    # This job runs even if sonar-scan fails
     needs: sonar-scan
     if: always()
     name: Snyk Security Scan
@@ -37,6 +38,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   zap-scan:
+    # This job runs even if snyk-scan fails
     needs: snyk-scan
     if: always()
     name: OWASP ZAP Scan
